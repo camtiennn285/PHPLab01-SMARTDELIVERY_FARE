@@ -65,7 +65,13 @@ echo "get type distanceKm: " . gettype($distanceKm) ."\n" ;
    //Tổng phí giao 
    $total = $baseFee + $distanceFee + $surcharges - $discount + $tax  ;
 
+   //delivery gate
+   $isDistanceValid = $distanceKm > 0 ;
+   $isWeightValid = $weight > 0 ;
+   $isServiceAvailable = $serviceAvailable === true ;
+   $isPriorityValid = $priority === "NORMAL" || $priority === "EXPRESS" ;
 
+   $canDeliver = $isDistanceValid && $isWeightValid && $isServiceAvailable && $isPriorityValid;
 
 
 
