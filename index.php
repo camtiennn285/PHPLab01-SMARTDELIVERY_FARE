@@ -19,10 +19,58 @@ $serviceAvailable = true ;
 
 //check data type before casting 
 echo "RAW DATA - BEFORE CASTING \n" ;
-var_dump( $rawDistance );
-var_dump( $weight );
-var_dump($priority);
-var_dump($customerType);
-var_dump($serviceAvailable);n
+echo "get type rawDistance: " . var_dump( $rawDistance );
+echo "get type weight: " . var_dump( $weight );
+echo "get type priority: " . var_dump($priority);
+echo "get type customerType: " . var_dump($customerType);
+echo "get type serviceAvaiable: " . var_dump($serviceAvailable); 
+echo "\n" ;
+//explicit casting: 
+$distanceKm = (float)$rawDistance ;
+echo "AFTER CASTING \n" ;
+echo "get type rawDistance: " . gettype($rawDistance) ."\n" ;
+echo "get type distanceKm: " . gettype($distanceKm) ."\n" ;
+
+//calculations
+
+   $baseFee = BASE_FEE ;
+   $distanceFee = $distaneKm*FEE_PER_KM ;
+
+   //PHỤ PHÍ HÀNG NẶNG
+   $heavySurcharge = 0;
+   if($weight > HEAVY_WEIGHT_MIN){
+      $heavySurcharge = HEAVY_SURCHARGE;
+   }
+   //PHỤ PHÍ EXPRESS 
+   $expressSurcharge = 0;
+   if($priority === "EXPRESS"){
+    $expressSurcharge = ($baseFee + $distanceFee)*EXPRESS_RATE ;
+   }
+
+   //PHỤ PHÍ 
+   $surcharges = $heavySurcharge + $expressSurcharge ;
+
+   //Tổng trước khi giảm giá premium 
+   $amountBeforeDiscount = $baseFee + $distanceFee + $surcharges ;
+
+   //Giảm giá premium 
+   $discount = 0;
+   if($customerType === "PREMIUM" && $amountBeforeDiscount >= PREMIUM_MIN) {
+        $discount = $amountBeforeDiscount*PREMIUM_DISCOUNT_RATE ;
+   }
+
+   //TAX
+   $taxableAmount = $amountBeforeDiscount - $discount ;
+   $tax = $taxableAmount * TAX_RATE ;
+   //Tổng phí giao 
+   $total = $baseFee + $distanceFee + $surcharges - $discount + $tax  ;
+
+
+
+
+
+
+ 
+
 
 ?>
