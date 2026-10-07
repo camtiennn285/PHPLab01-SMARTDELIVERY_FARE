@@ -34,7 +34,7 @@ echo "get type distanceKm: " . gettype($distanceKm) ."\n" ;
 //calculations
 
    $baseFee = BASE_FEE ;
-   $distanceFee = $distaneKm*FEE_PER_KM ;
+   $distanceFee = $distanceKm*FEE_PER_KM ;
 
    //PHỤ PHÍ HÀNG NẶNG
    $heavySurcharge = 0;
@@ -72,9 +72,57 @@ echo "get type distanceKm: " . gettype($distanceKm) ."\n" ;
    $isPriorityValid = $priority === "NORMAL" || $priority === "EXPRESS" ;
 
    $canDeliver = $isDistanceValid && $isWeightValid && $isServiceAvailable && $isPriorityValid;
+   $status = $canDeliver ? "ACCEPTED" : "BLOCKED";
+   var_dump($canDeliver);
 
 
+   //receipt 
+   
+$finalTotal = $canDeliver ? $total : 0;   // đơn BLOCKED thì không có phí giao
 
+$receipt  = "=== SMARTDELIVERY RECEIPT ===" . PHP_EOL;
+$receipt .= "Distance: " . $distanceKm . " km" . PHP_EOL;
+$receipt .= "Weight: " . $weight . " kg" . PHP_EOL;
+$receipt .= "Priority: " . $priority . PHP_EOL;
+$receipt .= "Base Fee: " . $baseFee . " " . CURRENCY . PHP_EOL;
+$receipt .= "Distance Fee: " . $distanceFee . " " . CURRENCY . PHP_EOL;
+$receipt .= "Surcharge: " . $surcharges . " " . CURRENCY . PHP_EOL;
+$receipt .= "Discount: " . $discount . " " . CURRENCY . PHP_EOL;
+$receipt .= "Tax: " . $tax . " " . CURRENCY . PHP_EOL;
+$receipt .= "TOTAL DELIVERY FEE: " . $finalTotal . " " . CURRENCY . PHP_EOL;
+
+if ($canDeliver) {
+    $receipt .= "Status: ACCEPTED" . PHP_EOL;
+} else {
+    $receipt .= "Status: BLOCKED" . PHP_EOL;
+}
+
+echo $receipt;
+
+
+ //render
+
+ ?>
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>SmartDelivery</title>
+</head>
+<body>
+    <h1>SmartDelivery</h1>
+    <p>Distance: <?= $distanceKm ?> km</p>
+    <p>Weight: <?= $weight ?> kg</p>
+    <p>Priority: <?= $priority ?></p>
+    <p>Base Fee: <?= $baseFee ?> <?= CURRENCY ?></p>
+    <p>Distance Fee: <?= $distanceFee ?> <?= CURRENCY ?></p>
+    <p>Surcharge: <?= $surcharges ?> <?= CURRENCY ?></p>
+    <p>Discount: <?= $discount ?> <?= CURRENCY ?></p>
+    <p>Tax: <?= $tax ?> <?= CURRENCY ?></p>
+    <p>Total Delivery Fee: <?= $finalTotal ?> <?= CURRENCY ?></p>
+    <p>Status: <?= $status ?></p>
+</body>
+</html>
 
  
 
