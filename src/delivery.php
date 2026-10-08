@@ -42,6 +42,12 @@
 
    $canDeliver = $isDistanceValid && $isWeightValid && $isServiceAvailable && $isPriorityValid;
    $status = $canDeliver ? "ACCEPTED" : "BLOCKED";
-   $finalTotal = $canDeliver ? $total:0 ;
+
+    if (!$canDeliver) {
+        // BLOCKED thì không tính phí: đưa tất cả về 0
+        $baseFee = $distanceFee = $surcharges = $discount = $tax = $total = 0;
+    }
+
+    $finalTotal = $total;
 
 ?>
